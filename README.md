@@ -85,4 +85,4 @@ Users : (rôle :utilisateur) Password: Thomas78190,
 ou créer un nouveau membre, là plus facilement grâce à l'application, onglet  **_"s'inscrire"_**
 
 ## Technologies
-[![My Skills](https://skillicons.dev/icons?i=git,github,python,django&theme=dark)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=git,github,python,django,postman&theme=dark)](https://skillicons.dev)
