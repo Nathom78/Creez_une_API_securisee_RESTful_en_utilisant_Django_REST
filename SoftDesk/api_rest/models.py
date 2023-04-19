@@ -11,14 +11,15 @@ class Users(AbstractUser):
     pass
 
 
-class Contributor(models):
+class Contributor(models.Model):
     """
     Class intermediate between the tables Users and Projects
     """
+    # Valeur sauvegardée
     AUTHOR = "Auteur"
     RESPONSABLE = "Responsable"
     CREATOR = "Créateur"
-
+    # tuple (valeur, label)
     ROLE_CHOICES = [
         (AUTHOR, "Auteur"),
         (RESPONSABLE, "Responsable"),
@@ -26,18 +27,23 @@ class Contributor(models):
     ]
 
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    projects = models.ManyToManyField(to="Projects")
-    role = models.CharField(choices=ROLE_CHOICES)
+    project = models.ForeignKey(to="Projects", on_delete=models.CASCADE)
+    role = models.CharField(max_length=11, choices=ROLE_CHOICES)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'project'], name="unique_project_user")
+        ]
 
 
-class Projects(models):
+class Projects(models.Model):
     title = models.CharField(max_length=30)
     contributors = models.ManyToManyField(to=settings.AUTH_USER_MODEL, through=Contributor)
     type = models.CharField(max_length=30)
     description = models.CharField(max_length=128)
 
 
-class Issues(models):
+class Issues(models.Model):
     BUG = "Bug"
     TASK = "Tâche"
     AMELIORATION = "Amélioration"
@@ -72,18 +78,18 @@ class Issues(models):
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=128)
     # A voir si défaut pour les choix
-    tag = models.CharField(choices=TAG_CHOICE)
-    status = models.CharField(choices=STATUS_CHOICE)
-    priority = models.CharField(choices=PRIORITY_CHOICE)
-
-    author = models.ForeignKey(to=Users, on_delete=models.CASCADE)
-    assignee = models.ForeignKey(to=Users, on_delete=models.CASCADE, default=author)
+    tag = models.CharField(max_length=12, choices=TAG_CHOICE)
+    priority = models.CharField(max_length=7, choices=PRIORITY_CHOICE)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICE)
+    
+    author = models.ForeignKey(to=Users, on_delete=models.CASCADE, related_name="author")
+    assignee = models.ForeignKey(to=Users, on_delete=models.CASCADE, default=author, related_name="assignee")
 
     created_time = models.DateTimeField(auto_now_add=True)
 
 
-class Comments(models):
+class Comments(models.Model):
     description = models.CharField(max_length=128)
-    author = models.ForeignKey(to=Users, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=Users, on_delete=models.CASCADE,)
     issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
