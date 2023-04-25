@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth import views
 
 from rest_framework import permissions
 from rest_framework import routers
@@ -24,7 +23,7 @@ from rest_framework import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from api_rest.views import UserViewSet, SignUpView
+from api_rest.views import SignUpView
 
 from swagger.views import (
     DecoratedTokenVerifyView,
@@ -34,8 +33,6 @@ from swagger.views import (
 )
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -65,5 +62,3 @@ urlpatterns = [
     path('api/token/verify/', DecoratedTokenVerifyView.as_view(), name='token_verify'),
     path('api/token/black_list/', DecoratedTokenBlacklistView.as_view(), name='token_black_list')
 ]
-
-
