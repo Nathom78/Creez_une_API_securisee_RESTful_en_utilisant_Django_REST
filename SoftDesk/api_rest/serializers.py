@@ -47,6 +47,9 @@ class ProjetsSerializer(serializers.ModelSerializer):
 
 
 class ContributorsListSerializer(serializers.ModelSerializer):
+    """
+    User_id will be username
+    """
     user = serializers.StringRelatedField()
 
     class Meta:

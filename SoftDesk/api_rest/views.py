@@ -1,5 +1,5 @@
 from django.http import QueryDict
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, mixins
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.conf import settings
@@ -32,14 +32,22 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class ContributorsViewSet(viewsets.ModelViewSet):
+class ContributorsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin):
     """
     API endpoint that allows 'responsable' to add, view, and delete contributors to a project.
     """
-    serializer_class = ContributorsSerializer
+    serializer_class = ContributorSerializer
     list_serializer_class = ContributorsListSerializer
-    permission_classes = [IsResponsableAuthenticated]
-    http_method_names = ['get', 'post', 'delete']
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'list':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsResponsableAuthenticated]
+        return [permission() for permission in permission_classes]
     
     def get_serializer_class(self):
         if self.action == "list":
@@ -50,8 +58,11 @@ class ContributorsViewSet(viewsets.ModelViewSet):
         """
         :return: Contributors in project_id  in url
         """
-        project_id = self.kwargs['project_id']
-        queryset = Contributors.objects.filter(project = project_id)
+        queryset = self.queryset
+        if self.kwargs:
+            project_id = self.kwargs['project_id']
+            queryset = Contributors.objects.filter(project = project_id)
+            
         return queryset
     
     def create(self, request, *args, **kwargs):
