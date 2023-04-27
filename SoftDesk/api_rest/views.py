@@ -47,19 +47,29 @@ class ContributorsViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
     
     def get_queryset(self):
+        """
+        :return: Contributors in project_id  in url
+        """
         project_id = self.kwargs['project_id']
         queryset = Contributors.objects.filter(project = project_id)
         return queryset
     
     def create(self, request, *args, **kwargs):
+        """
+        Add item 'projet' in serializer.data from url
+        :param request:
+        :param args:
+        :param kwargs: project_id in url
+        :return: response created status
+        """
         project_id = self.kwargs['project_id']
         body = QueryDict(mutable = True)
         print(request.data)
         for key, value in request.data.items():
             body.__setitem__(key, value)
         body.__setitem__('project', project_id)
+        body._mutable = False
         print(body)
-        
         serializer = self.get_serializer(data = body)
         serializer.is_valid(raise_exception = True)
         self.perform_create(serializer)
