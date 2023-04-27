@@ -9,7 +9,7 @@ from api_rest.permissions import IsResponsableAuthenticated
 from api_rest.serializers import (
     SignUpSerializer,
     ProjetsSerializer,
-    ContributorsSerializer,
+    ContributorSerializer,
     ContributorsListSerializer,
 )
 

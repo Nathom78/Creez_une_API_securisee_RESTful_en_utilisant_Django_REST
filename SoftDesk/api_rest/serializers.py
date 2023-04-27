@@ -1,5 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from api_rest.models import (
     Users,
@@ -53,8 +54,14 @@ class ContributorsListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ContributorsSerializer(serializers.ModelSerializer):
+class ContributorSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Contributors
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Contributors.objects.all(),
+                fields = ['user', 'project']
+            )
+        ]
