@@ -17,13 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import routers
 
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from api_rest.views import SignUpView
+from api_rest.views import (
+    SignUpView,
+    ProjectViewSet,
+    ContributorsViewSet,
+)
 
 from swagger.views import (
     DecoratedTokenVerifyView,
@@ -33,6 +37,8 @@ from swagger.views import (
 )
 
 router = routers.DefaultRouter()
+router.register('projects', ProjectViewSet, basename = 'project')
+router.register(r'^projects/(?P<project_id>[0-9]+)/users', ContributorsViewSet, basename = 'users')
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -44,12 +50,14 @@ schema_view = get_schema_view(
       license=openapi.License(name="BSD License"),
    ),
    public=True,
-   permission_classes=[permissions.AllowAny],
+   permission_classes=[AllowAny],
 )
 
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    
+    path('accounts/', include('rest_framework.urls', namespace = 'rest_framework')),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -62,3 +70,4 @@ urlpatterns = [
     path('api/token/verify/', DecoratedTokenVerifyView.as_view(), name='token_verify'),
     path('api/token/black_list/', DecoratedTokenBlacklistView.as_view(), name='token_black_list')
 ]
+
