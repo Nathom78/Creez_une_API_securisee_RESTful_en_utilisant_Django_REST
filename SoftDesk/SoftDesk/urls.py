@@ -27,7 +27,8 @@ from api_rest.views import (
     SignUpView,
     ProjectViewSet,
     ContributorsViewSet,
-    IssuesViewSet
+    IssuesViewSet,
+    CommentsViewSet
 )
 
 from swagger.views import (
@@ -42,7 +43,8 @@ router = routers.DefaultRouter()
 router.register('projects', ProjectViewSet, basename = 'project')
 router.register(r'^projects/(?P<project_id>[0-9]+)/users', ContributorsViewSet, basename = 'users')
 router.register(r'^projects/(?P<project_id>[0-9]+)/issues', IssuesViewSet, basename = 'issues')
-
+router.register(r'^projects/(?P<project_id>[0-9]+)/issues/(?P<issue_id>[0-9]+)/comments', CommentsViewSet,
+                basename = 'comments')
 
 schema_view = get_schema_view(
     openapi.Info(

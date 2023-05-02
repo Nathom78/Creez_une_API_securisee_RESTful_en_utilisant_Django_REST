@@ -12,9 +12,25 @@ from api_rest.models import (
 )
 
 
+class ContributorsAdmin(admin.ModelAdmin):
+    list_filter = [("project", admin.RelatedOnlyFieldListFilter)]
+    list_display = ["user", "project"]
+    ordering = ["project"]
+
+
+class IssuesAdmin(admin.ModelAdmin):
+    list_filter = ["status"]
+    list_display = ["title", "project", "status"]
+    ordering = ["project"]
+
+
+class ProjectsAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+
+
 admin.site.register(Users, UserAdmin)
-admin.site.register(Contributors)
-admin.site.register(Projects)
-admin.site.register(Issues)
+admin.site.register(Contributors, ContributorsAdmin)
+admin.site.register(Projects, ProjectsAdmin)
+admin.site.register(Issues, IssuesAdmin)
 admin.site.register(Comments)
 admin.site.unregister(Group)

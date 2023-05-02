@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
@@ -8,8 +7,8 @@ from django.conf import settings
 
 
 class Users(AbstractUser):
-    email = models.EmailField(unique = True, blank=True, max_length=254, verbose_name='email address')
-    
+    email = models.EmailField(unique = True, blank = True, max_length = 254, verbose_name = 'email address')
+
     def __str__(self):
         return f"{self.username}"
 
@@ -108,7 +107,7 @@ class Issues(models.Model):
     status = models.CharField(max_length = 8, choices = STATUS_CHOICE)
 
     author = models.ForeignKey(to = Users, on_delete = models.CASCADE, related_name = "author")
-    assignee = models.ForeignKey(to = Users, on_delete = models.CASCADE, default = author, related_name = "assignee")
+    assignee = models.ForeignKey(to = Users, on_delete = models.CASCADE, related_name = "assignee")
 
     created_time = models.DateTimeField(auto_now_add = True)
 

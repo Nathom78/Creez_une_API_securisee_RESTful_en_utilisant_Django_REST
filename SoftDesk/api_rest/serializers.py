@@ -39,7 +39,13 @@ class SignUpSerializer(serializers.ModelSerializer):
         return user
 
 
-class ProjetsSerializer(serializers.ModelSerializer):
+class ProjetsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ["title", "type", "pk"]
+
+
+class ProjetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = '__all__'
@@ -69,7 +75,28 @@ class ContributorSerializer(serializers.ModelSerializer):
         ]
 
 
+# assignee = serializers.PrimaryKeyRelatedField()
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issues
         fields = '__all__'
+
+
+class IssueListSerializer(serializers.ModelSerializer):
+    project = serializers.StringRelatedField()
+
+    class Meta:
+        model = Issues
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = '__all__'
+
+
+class CommentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ["issue", "pk"]
