@@ -55,8 +55,12 @@ def body_insertion(self, request):
     if view == "CommentsViewSet":
         issue = body.get("project", default = None)
         issue_id = self.kwargs['issue_id']
+        user_id = request.user.id
+        author = body.get("author", default = None)
         if issue is None:
             body.__setitem__('issue', issue_id)
+        if author is None:
+            body.__setitem__('author', user_id)
     body._mutable = False
     return body
 
@@ -212,6 +216,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     list_serializer_class = CommentListSerializer
     permission_classes = [ContributorOrAuthorPermissions]
+    http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
         queryset = self.queryset
