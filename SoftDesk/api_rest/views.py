@@ -90,6 +90,27 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return self.list_serializer_class
         return super().get_serializer_class()
+    
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        
+        serializer = self.get_serializer(data = request.data)
+        print(serializer)
+        serializer.is_valid(raise_exception = True)
+        self.perform_create(serializer)
+        
+        # Save the user like a contributor responsable for this project
+        project_id = serializer.data["id"]
+        responsable_model = {"user": request.user.id, "project": project_id, "role": "Responsable"}
+        user_serializer = ContributorSerializer(data = responsable_model)
+        user_serializer.is_valid(raise_exception = True)
+        user_serializer.save()
+        # Update the instance created with Contributors updated
+        serializer_instance = Projects.objects.get(pk = project_id)
+        serializer = self.get_serializer(serializer_instance)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status = status.HTTP_201_CREATED, headers = headers)
 
 
 class ContributorsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin,

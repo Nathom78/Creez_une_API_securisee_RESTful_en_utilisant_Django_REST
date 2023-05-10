@@ -49,7 +49,7 @@ certifi             2022.12.7
 charset-normalizer  3.1.0
 coreapi             2.3.3
 coreschema          0.0.4
-Django              4.2
+Django              4.2.1
 djangorestframework 3.14.0
 drf-yasg            1.21.5
 idna                3.4
@@ -58,7 +58,7 @@ itypes              1.2.0
 Jinja2              3.1.2
 MarkupSafe          2.1.2
 packaging           23.1
-pip                 23.1
+pip                 23.1.2
 pytz                2023.3
 requests            2.28.2
 ruamel.yaml         0.17.21
@@ -75,7 +75,7 @@ Dans une fenêtre de terminal, se placer à la racine de l'application
 ici SoftDesk, ensuite taper les commandes suivantes :
 
 Tout d'abord, nous devons appliquer les migrations à la base de donnée,
-afin de pouvoir l'utiliser dans ce nouveau environnement la base db.sqlite.3 importer. 
+afin de pouvoir utiliser dans ce nouvel environnement, la base db.sqlite3 importée. 
 <pre><code>
 (.env) PS ~...\SoftDesk> py manage.py migrate
 </code></pre>
