@@ -67,7 +67,8 @@ def body_insertion(self, request):
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows project where user is attached, to be viewed or edited, or created a new one.
+    API endpoint that allows project where user is attached, to be listed, viewed, edited, deleted, or created a new
+    one.
     """
     serializer_class = ProjetSerializer
     list_serializer_class = ProjetsListSerializer
@@ -163,6 +164,10 @@ class ContributorsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
 
 class IssuesViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
                     mixins.UpdateModelMixin):
+    """
+        API endpoint that allows Issues from a project where user is attached, to be listed, deleted, edited,
+        or created a new one.
+    """
     serializer_class = IssueSerializer
     list_serializer_class = IssueListSerializer
     permission_classes = [ContributorOrAuthorPermissions]
@@ -211,7 +216,8 @@ class IssuesViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Creat
 
 class CommentsViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows project where user is attached, to be viewed or edited, or created a new one.
+    API endpoint that allows comment to an issue from a project where user is attached, to be listed, viewed, deleted,
+    edited, or created a new one.
     """
     serializer_class = CommentSerializer
     list_serializer_class = CommentListSerializer
@@ -219,13 +225,13 @@ class CommentsViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
+        """
+        :return: Comments from an issue in url
+        """
         queryset = self.queryset
         if self.kwargs:
             issue_id = self.kwargs['issue_id']
-            print("issue_id" + issue_id)
             queryset = Comments.objects.filter(issue = issue_id)
-        if self.request.user.is_superuser:
-            queryset = Projects.objects.all()
         return queryset
 
     def get_serializer_class(self):
