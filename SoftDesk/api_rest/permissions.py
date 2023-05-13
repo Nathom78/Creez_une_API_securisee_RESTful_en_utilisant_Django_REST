@@ -9,9 +9,9 @@ class IsResponsableAuthenticated(BasePermission):
         # Ne donnons l’accès qu’aux utilisateurs responsable du projets et authentifiés
         is_responsable = False
         project_id = request.parser_context['kwargs'].get('project_id')
-        if_contributor = Contributors.objects.filter(user = request.user, project = project_id)
+        if_contributor = Contributors.objects.filter(user=request.user, project=project_id)
         if if_contributor.exists():
-            contributor = Contributors.objects.get(user = request.user, project = project_id)
+            contributor = Contributors.objects.get(user=request.user, project=project_id)
             if contributor.role == "Responsable":
                 is_responsable = True
         return bool(request.user and request.user.is_authenticated and is_responsable)
@@ -23,7 +23,7 @@ class IsJustContributorsAuthenticated(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Ne donnons l’accès qu’aux utilisateurs contributors du projets et authentifiés
         is_contributor = False
-        if_contributor = Contributors.objects.filter(user = request.user, project = obj.pk)
+        if_contributor = Contributors.objects.filter(user=request.user, project=obj.pk)
         if if_contributor.exists():
             is_contributor = True
         return bool(request.user and request.user.is_authenticated and is_contributor)
@@ -31,12 +31,12 @@ class IsJustContributorsAuthenticated(BasePermission):
 
 class ContributorOrAuthorPermissions(BasePermission):
     # message = 'Customers is not the author or for PUT or PATCH method it may be assignee.'
-    
+
     def has_permission(self, request, view):
         # Ne donnons l’accès qu’aux utilisateurs contributors du projets et authentifiés
         is_contributor = False
         project_id = request.parser_context['kwargs'].get('project_id')
-        if_contributor = Contributors.objects.filter(user = request.user, project = project_id)
+        if_contributor = Contributors.objects.filter(user=request.user, project=project_id)
         if if_contributor.exists():
             is_contributor = True
         return bool(request.user and request.user.is_authenticated and is_contributor)
@@ -44,7 +44,7 @@ class ContributorOrAuthorPermissions(BasePermission):
     def has_object_permission(self, request, view, obj):
         """DELETE method just the author and others author or assignee"""
         project_id = request.parser_context['kwargs'].get('project_id')
-        if_contributor = Contributors.objects.filter(user = request.user, project = project_id)
+        if_contributor = Contributors.objects.filter(user=request.user, project=project_id)
         if request.method == "PUT" or request.method == "PATCH":
             if view.__class__.__name__ == "IssuesViewSet":
                 if request.user == obj.author or request.user == obj.assignee:
