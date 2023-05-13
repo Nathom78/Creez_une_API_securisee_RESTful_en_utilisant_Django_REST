@@ -113,7 +113,7 @@ Admin / Admin
 https://documenter.getpostman.com/view/21242674/2s93ebRqTE
 ***
 # Technologies
-<p align=center>
+<p align=center class="bg-info">
 <img src="https://skillicons.dev/icons?i=git,github,python,django,postman&theme=dark">
 <img width=150 src=https://www.django-rest-framework.org/img/logo.png > 
 </p>
