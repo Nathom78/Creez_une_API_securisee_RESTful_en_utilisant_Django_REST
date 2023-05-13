@@ -1,8 +1,3 @@
----
-output:
-  tufte::tufte_html:
-    tufte_features: ["background"]
----
 # Créez une API sécurisée RESTful en utilisant Django REST
 [Projet 10 du parcours OpenClassrooms Développeur d'application - Python](https://openclassrooms.com/fr/paths/518/projects/838/assignment)
 
@@ -122,7 +117,7 @@ https://documenter.getpostman.com/view/21242674/2s93ebRqTE
 <img src="https://skillicons.dev/icons?i=git,github,python,django,postman&theme=dark">
 </p>
 
-![logo class="bg-primary"](https://www.django-rest-framework.org/img/logo.png)
+![logo](https://www.django-rest-framework.org/img/logo.png)
 
 ## Conventions de nommage et de codes 
 <p>PEP 8 – Style Guide for Python Code
