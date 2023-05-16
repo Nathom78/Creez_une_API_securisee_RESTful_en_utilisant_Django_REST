@@ -2,8 +2,8 @@ from rest_framework.permissions import BasePermission
 from api_rest.models import Contributors
 
 
-class IsResponsableAuthenticated(BasePermission):
-    message = 'Customers is not a Responsable of this project or authenticated.'
+class IsAuthorAuthenticated(BasePermission):
+    message = 'Customers is not the author of this project or authenticated.'
 
     def has_permission(self, request, view):
         # Ne donnons l’accès qu’aux utilisateurs responsable du projets et authentifiés

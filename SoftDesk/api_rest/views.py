@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from api_rest.permissions import (
-    IsResponsableAuthenticated,
+    IsAuthorAuthenticated,
     ContributorOrAuthorPermissions,
     IsJustContributorsAuthenticated
 )
@@ -45,6 +45,9 @@ def body_insertion(self, request):
     if view == "IssuesViewSet":
         assignee = body.get("assignee", default=None)
         author = body.get("author", default=None)
+        if author is None:
+            author = request.user.id
+            body.__setitem__('author', author)
         if assignee is None and author is not None:
             if request.method != "PATCH":
                 body.__setitem__('assignee', author)
@@ -76,10 +79,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'create']:
             permission_classes = [IsJustContributorsAuthenticated]
         else:
-            permission_classes = [IsResponsableAuthenticated]
+            permission_classes = [IsAuthorAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -129,7 +132,7 @@ class ContributorsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
         if self.action == 'list':
             permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [IsResponsableAuthenticated]
+            permission_classes = [IsAuthorAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
