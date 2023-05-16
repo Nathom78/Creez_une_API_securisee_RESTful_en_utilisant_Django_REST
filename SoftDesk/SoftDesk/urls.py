@@ -38,7 +38,7 @@ from swagger.views import (
     DecoratedTokenBlacklistView
 )
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 router.register('projects', ProjectViewSet, basename='project')
 router.register(r'^projects/(?P<project_id>[0-9]+)/users', ContributorsViewSet, basename='users')
 router.register(r'^projects/(?P<project_id>[0-9]+)/issues', IssuesViewSet, basename='issues')

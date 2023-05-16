@@ -76,10 +76,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'list':
-            permission_classes = [IsAuthenticated]
-        else:
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsJustContributorsAuthenticated]
+        else:
+            permission_classes = [IsResponsableAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -102,7 +102,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         # Save the user like a contributor responsable for this project
         project_id = serializer.data["id"]
-        responsable_model = {"user": request.user.id, "project": project_id, "role": "Responsable"}
+        responsable_model = {"user": request.user.id, "project": project_id, "role": "Auteur"}
         user_serializer = ContributorSerializer(data=responsable_model)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()

@@ -19,18 +19,17 @@ class Contributors(models.Model):
     """
     # Valeur sauvegardée
     AUTHOR = "Auteur"
-    RESPONSABLE = "Responsable"
-    CREATOR = "Créateur"
+    CONTRIBUTOR = "Contributeur"
+
     # tuple (valeur, label)
     ROLE_CHOICES = [
         (AUTHOR, "Auteur"),
-        (RESPONSABLE, "Responsable"),
-        (CREATOR, "Créateur")
+        (CONTRIBUTOR, "Contributeur")
     ]
 
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(to="Projects", on_delete=models.CASCADE, related_name="project")
-    role = models.CharField(max_length=11, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=16, choices=ROLE_CHOICES)
 
     class Meta:
         constraints = [

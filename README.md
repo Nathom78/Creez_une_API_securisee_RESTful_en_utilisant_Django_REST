@@ -108,7 +108,7 @@ This exposes 4 endpoints:
 - A swagger-ui view of your API specification at /swagger/
 - A ReDoc view of your API specification at /redoc/
 ### Administrateur Django:
-Admin / Admin
+Admin / Admin (à changer)
 ## 6. Documentation Postman publique
 https://documenter.getpostman.com/view/21242674/2s93ebRqTE
 ***

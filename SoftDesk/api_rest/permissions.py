@@ -12,7 +12,7 @@ class IsResponsableAuthenticated(BasePermission):
         if_contributor = Contributors.objects.filter(user=request.user, project=project_id)
         if if_contributor.exists():
             contributor = Contributors.objects.get(user=request.user, project=project_id)
-            if contributor.role == "Responsable":
+            if contributor.role == "Auteur":
                 is_responsable = True
         return bool(request.user and request.user.is_authenticated and is_responsable)
 
